@@ -11,4 +11,9 @@ module.exports = class DroitsDAO extends BaseDAO {
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
+    insert(droits) {
+        console.log(droits)
+        return this.db.query("INSERT INTO public.droits(label) values ($1)",
+            [droits.label])
+    }
 }

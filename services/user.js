@@ -11,9 +11,9 @@ module.exports = class UserService {
         return this.dao.getAll()
     }
 
-    inserthash(email, password) {
+    inserthash(email, password, id_droits) {
         console.log(email, password)
-        return this.dao.insert(new User(email, this.hashPassword(password)))
+        return this.dao.insert(new User(email, this.hashPassword(password), id_droits))
     }
     async validatePassword(email, password) {
         console.log(email, password)

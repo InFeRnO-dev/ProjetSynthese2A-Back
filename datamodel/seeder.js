@@ -1,16 +1,38 @@
 const User = require('../class/user')
+const Droits = require('../class/droits')
 
-module.exports = (userService) => {
+module.exports = (userService, droitsService) => {
     return new Promise(async (resolve, reject) => {
 
-        await userService.dao.db.query("SELECT * FROM public.user").then(res => {
-            console.log(res)
-        }).catch(e => {console.log(e)})
+        try {
+            await droitsService.dao.db.query("CREATE TABLE public.droits(id_droits SERIAL PRIMARY KEY, label TEXT)")
+            // INSERTs
+            droitsService.insert("admin")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            droitsService.insert("atelier")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            droitsService.insert("commercial")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            droitsService.insert("comptabilite")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+        } catch (e) {
+            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
+                resolve()
+                console.log("table droits déjà créé")
+            } else {
+                reject(e)
+                console.log(e)
+            }
+        }
 
         try {
-            await userService.dao.db.query("CREATE TABLE public.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT)")
+            await userService.dao.db.query("CREATE TABLE public.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT, id_droits INT REFERENCES public.droits(id_droits))")
             // INSERTs
-            userService.inserthash("user0@test.com", "default")
+            userService.inserthash("user0@test.com", "default", 1)
                 .then(res => console.log(res))
                 .catch(e => console.log(e))
         } catch (e) {

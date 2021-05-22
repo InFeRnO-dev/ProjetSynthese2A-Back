@@ -26,7 +26,7 @@ const jwt = require('./jwt')(userService)
 require("./api/user")(app, userService, jwt)
 require("./api/droits")(app, droitsService, jwt)
 
-require('./datamodel/seeder')(userService)
+require('./datamodel/seeder')(userService, droitsService)
    .then(app.listen(3333))
 //app.listen(3333,"localhost")
 console.log("app listen on port 3333")
