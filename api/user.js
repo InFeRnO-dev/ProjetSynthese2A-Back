@@ -1,15 +1,34 @@
 const jwtreq = require('jsonwebtoken')
 module.exports = (app, serviceUser, jwt) => {
 
-    app.get('/user', async (res) => {
-        await res.json(await serviceUser.dao.getAll())
+    app.get('/user', async (req, res) => {
+        try{
+            const users = await serviceUser.dao.getAll()
+            console.log(res)
+            console.log(users)
+            return res.json(users)
+        }catch(e){
+            console.log(e)
+        }
+        
     })
 
-    app.post('/user/authenticate', (req, res) => {
-        const {email, password} = req.body
-        this.email = email
+    app.get('/user/:email', async (req, res) => {
+        try{
+            const user = await serviceUser.dao.getByEmail(email)
+            console.log(res)
+            console.log(user)
+            return res.json(user)
+        }catch(e){
+            console.log(e)
+        }
+        
+    })
+
+    app.post('/user/authenticate', async (req, res) => {
+        const email = req.body.email
+        const password = req.body.password
         if ((email === undefined) || (password === undefined)) {
-            console.log(req.body)
             res.status(400).end()
             return
         }
@@ -26,6 +45,18 @@ module.exports = (app, serviceUser, jwt) => {
                 res.status(500).end()
             })
     })
+
+    app.post('/user', async (req, res) => {
+        try{
+            const user = await serviceUser.dao.getByEmail(req.body.email)
+            console.log(user)
+            return res.json(user)
+        }catch(e){
+            console.log(e)
+        }
+        
+    })
+
     app.post('/user/timeout', (req,res) => {
         let oldtoken = req.body.token
         jwtreq.verify(oldtoken, jwt.getKey(), {algorithm: "HS256"}, (err) => {

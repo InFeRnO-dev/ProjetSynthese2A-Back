@@ -1,30 +1,33 @@
 const BaseDAO = require('./basedao')
 
-module.exports = class UseraccountDAO extends BaseDAO {
+module.exports = class UserDAO extends BaseDAO {
     constructor(db) {
         super(db, "user")
     }
+
     getAll() {
+        console.log("getalldao")
         return new Promise((resolve, reject) =>
-            this.db.query("SELECT * FROM projet.user")
-                .then(res => resolve(res.rows))
-                .catch(e => reject(e)))
+            this.db.query("SELECT * FROM public.user")
+                .then(response => {resolve(response.rows)})
+                .catch(e => {reject(e)}))
     }
+
     getUserById(id) {
         return new Promise((resolve, reject) =>
-            this.db.query("SELECT * FROM useraccount WHERE id_user=$1",
+            this.db.query("SELECT * FROM public.user WHERE id_user=$1",
                 [id])
                 .then(res => resolve(res.rows[0]))
                 .catch(e => reject(e)))
     }
-    getByLogin(login) {
+    getByEmail(email) {
         return new Promise((resolve, reject) =>
-            this.db.query("SELECT * FROM useraccount WHERE login=$1", [ login ])
-                .then(res => resolve(res.rows[0]) )
+            this.db.query("SELECT * FROM public.user WHERE email=$1", [ email ])
+                .then(res => resolve(res.rows[0]))
                 .catch(e => reject(e)))
     }
-    insert(useraccount) {
-        return this.db.query("INSERT INTO useraccount(login,password) VALUES ($1,$2)",
-            [useraccount.login,useraccount.password])
+    insert(user) {
+        return this.db.query("INSERT INTO public.user(email,password) VALUES ($1,$2)",
+            [user.email, user.password])
     }
 }

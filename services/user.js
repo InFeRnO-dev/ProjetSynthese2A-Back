@@ -12,12 +12,12 @@ module.exports = class UserService {
     }
 
     inserthash(email, password) {
-        console.log(login, password)
+        console.log(email, password)
         return this.dao.insert(new User(email, this.hashPassword(password)))
     }
     async validatePassword(email, password) {
         console.log(email, password)
-        const user = await this.dao.getByLogin(email.trim())
+        const user = await this.dao.getByEmail(email.trim())
         console.log(user)
         return this.comparePassword(password, user.password)
     }

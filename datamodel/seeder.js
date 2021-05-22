@@ -1,29 +1,18 @@
 const User = require('../class/user')
-const List = require('../class/list')
-const Item = require('../class/item')
-const Partage = require('../class/partage')
-
 
 module.exports = (userService) => {
     return new Promise(async (resolve, reject) => {
-        console.log("test")
-        /*try {
 
-            await userService.dao.db.query("CREATE TABLE projet.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT)")
+        await userService.dao.db.query("SELECT * FROM public.user").then(res => {
+            console.log(res)
+        }).catch(e => {console.log(e)})
+
+        try {
+            await userService.dao.db.query("CREATE TABLE public.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT)")
             // INSERTs
             userService.inserthash("user0@test.com", "default")
-                .then(_ => useraccountService.dao.getByLogin("user0@test.com"))
+                .then(res => console.log(res))
                 .catch(e => console.log(e))
-            userService.inserthash("user1@test.com", "default")
-                .then(_ => useraccountService.dao.getByLogin("user1@test.com"))
-                .catch(e => console.log(e))
-            userService.inserthash("user2@test.com", "default")
-                .then(_ => useraccountService.dao.getByLogin("user2@test.com"))
-                .catch(e => console.log(e))
-            userService.inserthash("user3@test.com", "default")
-                .then(_ => useraccountService.dao.getByLogin("user3@test.com"))
-                .catch(e => console.log(e))
-
         } catch (e) {
             if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
                 resolve()
@@ -34,7 +23,7 @@ module.exports = (userService) => {
             }
         }
 
-
+        /*
         try {
             await listService.dao.db.query("CREATE TABLE list(id_list SERIAL PRIMARY KEY, shop TEXT, date DATE, archived BOOLEAN, fk_id_user INT REFERENCES useraccount(id_user) ON DELETE CASCADE)")
             // INSERTs
