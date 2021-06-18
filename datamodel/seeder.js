@@ -1,9 +1,12 @@
 const User = require('../class/user')
 const Droits = require('../class/droits')
+const User_droits = require('../class/user_droits')
 
-module.exports = (userService, droitsService) => {
+module.exports = (userService, droitsService, userDroitsService) => {
     return new Promise(async (resolve, reject) => {
 
+        // creation table droits et seed droits
+        
         try {
             await droitsService.dao.db.query("CREATE TABLE public.droits(id_droits SERIAL PRIMARY KEY, label TEXT)")
             // INSERTs
@@ -29,10 +32,12 @@ module.exports = (userService, droitsService) => {
             }
         }
 
+        // creation table user et seed user
+
         try {
-            await userService.dao.db.query("CREATE TABLE public.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT, id_droits INT REFERENCES public.droits(id_droits))")
+            await userService.dao.db.query("CREATE TABLE public.user(id_user SERIAL PRIMARY KEY, email TEXT, password TEXT)")
             // INSERTs
-            userService.inserthash("user0@test.com", "default", 1)
+            userService.inserthash("user0@test.com", "default")
                 .then(res => console.log(res))
                 .catch(e => console.log(e))
         } catch (e) {
@@ -45,61 +50,32 @@ module.exports = (userService, droitsService) => {
             }
         }
 
-        /*
-        try {
-            await listService.dao.db.query("CREATE TABLE list(id_list SERIAL PRIMARY KEY, shop TEXT, date DATE, archived BOOLEAN, fk_id_user INT REFERENCES useraccount(id_user) ON DELETE CASCADE)")
-            // INSERTs
-            await listService.dao.insert(new List("shop1", new Date(), false, 1))
-            await listService.dao.insert(new List("shop2", new Date(), true, 1))
-            await listService.dao.insert(new List("shop3", new Date(), false, 2))
-            await listService.dao.insert(new List("shop4", new Date(), true, 2))
-            await listService.dao.insert(new List("shop5", new Date(), false, 3))
-            await listService.dao.insert(new List("shop6", new Date(), true, 3))
-            await listService.dao.insert(new List("shop7", new Date(), false, 4))
-            await listService.dao.insert(new List("shop8", new Date(), true, 4))
-        } catch (e) {
-            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
-                resolve()
-                console.log("table list déjà créé")
-            } else {
-                reject(e)
-                console.log(e)
-            }
-        }
-        try {
-            await itemService.dao.db.query("CREATE TABLE item(id_item SERIAL PRIMARY KEY, label TEXT, quantity NUMERIC, checked BOOLEAN, contains INT REFERENCES list(id_list) ON DELETE CASCADE, fk_id_user INT REFERENCES useraccount(id_user) ON DELETE CASCADE)")
-            // INSERTs
-                await itemService.dao.insert(new Item("Test",10,false,1,1))
-            for (let j = 0; j < 2; j++) {
-                await itemService.dao.insert(new Item("list1label" + j, 15 + j, false, 1,1))
-            }
-            for (let k = 0; k < 2; k++) {
-                await itemService.dao.insert(new Item("list2label" + k, 25 + k, false, 2,2))
-            }
-        } catch (err) {
-            if (err.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
-                resolve()
-                console.log("table item déjà créé")
-            } else {
-                reject(err)
-                console.log(err)
-            }
-        }
-        try {
-            await partageService.dao.db.query("CREATE TABLE partage(id_partage SERIAL PRIMARY KEY, id_proprio INT REFERENCES useraccount(id_user) ON DELETE CASCADE, id_partage_user INT REFERENCES useraccount(id_user) ON DELETE CASCADE, id_list INT REFERENCES list(id_list) ON DELETE CASCADE, droits INT)")
-            // INSERTs
-            await partageService.dao.insert(new Partage(1,2, 1, 1))
+        // creation table user_droits et seed user_droits
 
+        try {
+            await userDroitsService.dao.db.query("CREATE TABLE public.user_droits(id_user_droits SERIAL PRIMARY KEY, id_droits INT REFERENCES public.droits(id_droits) ON DELETE CASCADE, id_user INT REFERENCES public.user(id_user) ON DELETE CASCADE)")
+            // INSERTs
+            userDroitsService.insert(1,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            userDroitsService.insert(2,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            userDroitsService.insert(3,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            userDroitsService.insert(4,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
         } catch (e) {
             if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
                 resolve()
-                console.log("table partage déjà créé")
+                console.log("table user_droits déjà créé")
             } else {
                 reject(e)
                 console.log(e)
             }
         }
-        */
     })
     
 }

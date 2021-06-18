@@ -10,6 +10,10 @@ module.exports = class DroitsService {
         return this.dao.getAll()
     }
 
+    async getAllDroitsByUserDroits(){
+        return this.dao.getAllDroitsByUserDroits()
+    }
+
     async insert(droits){
         return this.dao.insert(new Droits(droits))
     }

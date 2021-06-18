@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const jwtKey = 'PS2A'
 const jwtExpirySeconds = 3600
 
-module.exports = (userService) => {
+module.exports = (userService, droitsService, userdroitsService) => {
     return {
         validateJWT(req, res, next) {
             if (req.headers.authorization === undefined) {
@@ -10,14 +10,14 @@ module.exports = (userService) => {
                 return
             }
             const token = req.headers.authorization.split(" ")[1];
-            jwt.verify(token, jwtKey, {algorithm: "HS256"},  async (err, useraccount) => {
+            jwt.verify(token, jwtKey, {algorithm: "HS256"},  async (err, user) => {
                 if (err) {
                     res.status(401).end()
                     return
                 }
-                console.log(useraccount)
+                console.log(user)
                 try {
-                    req.useraccount = await useraccountService.dao.getByLogin(useraccount.login)
+                    req.user = await userService.dao.getByEmail(user.email)
                     return next()
                 } catch(e) {
                     console.log(e)

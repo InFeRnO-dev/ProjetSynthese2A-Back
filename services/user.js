@@ -11,9 +11,20 @@ module.exports = class UserService {
         return this.dao.getAll()
     }
 
-    inserthash(email, password, id_droits) {
+    inserthash(email, password) {
         console.log(email, password)
-        return this.dao.insert(new User(email, this.hashPassword(password), id_droits))
+        return this.dao.insert(email, this.hashPassword(password))
+    }
+    update(id, email, password){
+        if(password === "" || password === undefined || password === null){
+            return this.dao.update(id, email, password)
+        }
+        else{
+            return this.dao.update(id, email, this.hashPassword(password))
+        }
+    }
+    delete(id){
+        return this.dao.delete(id)
     }
     async validatePassword(email, password) {
         console.log(email, password)
@@ -27,4 +38,5 @@ module.exports = class UserService {
     hashPassword(password) {
         return bcrypt.hashSync(password, 5)
     }
+
 }
