@@ -4,9 +4,13 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const UserService = require("./services/user")
-const DroitsService = require("./services/droits")
-const UserdroitsService = require("./services/user_droits")
+const UserService = require("./services/user-droits/user")
+const DroitsService = require("./services/user-droits/droits")
+const UserdroitsService = require("./services/user-droits/user_droits")
+const Poste_TravailService = require("./services/atelier/fabrication/poste_travail")
+const QualificationService = require("./services/atelier/fabrication/qualification")
+const MachineService = require("./services/atelier/fabrication/machine")
+const Poste_MachineService = require("./services/atelier/fabrication/poste_machine")
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: false })) // URLEncoded form data
@@ -23,13 +27,36 @@ const db = new pg.Pool({ connectionString: connectionString })
 const userService = new UserService(db)
 const droitsService = new DroitsService(db)
 const userdroitsService = new UserdroitsService(db)
-const jwt = require('./jwt')(userService, droitsService, userdroitsService)
+const poste_travailService = new Poste_TravailService(db)
+const qualificationService = new QualificationService(db)
+const machineService = new MachineService(db)
+const poste_machineService = new Poste_MachineService(db)
 
-require("./api/user")(app, userService, jwt)
-require("./api/droits")(app, droitsService, jwt)
-require("./api/user_droits")(app, userdroitsService, jwt)
+const jwt = require('./jwt')(userService,
+                             droitsService,
+                             userdroitsService,
+                             poste_travailService,
+                             qualificationService,
+                             machineService,
+                             poste_machineService
+                            )
 
-require('./datamodel/seeder')(userService, droitsService, userdroitsService)
+require("./api/user-droits/user")(app, userService, jwt)
+require("./api/user-droits/droits")(app, droitsService, jwt)
+require("./api/user-droits/user_droits")(app, userdroitsService, jwt)
+require("./api/atelier/fabrication/poste_travail")(app, poste_travailService, jwt)
+require("./api/atelier/fabrication/qualification")(app, qualificationService, jwt)
+require("./api/atelier/fabrication/machine")(app, machineService, jwt)
+require("./api/atelier/fabrication/poste_machine")(app, poste_machineService, jwt)
+
+require('./datamodel/seeder')(userService,
+                              droitsService,
+                              userdroitsService,
+                              poste_travailService,
+                              qualificationService,
+                              machineService,
+                              poste_machineService
+                             )
    .then(app.listen(3333))
 console.log("app listen on port 3333")
 

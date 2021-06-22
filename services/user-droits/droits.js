@@ -1,5 +1,5 @@
-const DroitsDAO = require("../datamodel/droitsdao")
-const Droits = require('../class/droits')
+const DroitsDAO = require("../../datamodel/user-droits/droitsdao")
+const Droits = require('../../class/user-droits/droits')
 
 module.exports = class DroitsService {
     constructor(db) {

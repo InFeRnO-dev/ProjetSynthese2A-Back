@@ -1,10 +1,10 @@
-const User = require('../class/user')
-const Droits = require('../class/droits')
-const User_droits = require('../class/user_droits')
 
-module.exports = (userService, droitsService, userDroitsService) => {
+module.exports = (userService, droitsService, userDroitsService, postetravailService, qualificationService, machineService, postemachineService) => {
     return new Promise(async (resolve, reject) => {
 
+    /* 
+                                    #### USER-DROITS #####
+    */
         // creation table droits et seed droits
         
         try {
@@ -76,6 +76,107 @@ module.exports = (userService, droitsService, userDroitsService) => {
                 console.log(e)
             }
         }
+
+    /*
+                                        ##### ATELIER / FABRICATION #####
+    */
+
+        //Creation table plan_travail + seed plan_travail
+
+        try {
+            await postetravailService.dao.db.query("CREATE TABLE public.poste_travail(id_poste_travail SERIAL PRIMARY KEY, label TEXT)")
+            // INSERTs
+            postetravailService.insert("PosteTravail1")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            postetravailService.insert("PosteTravail2")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            postetravailService.insert("PosteTravail3")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            postetravailService.insert("PosteTravail4")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+        } catch (e) {
+            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
+                resolve()
+                console.log("table postetravail déjà créé")
+            } else {
+                reject(e)
+                console.log(e)
+            }
+        }
+
+        //Creation table qualification + seed qualification
+
+        try {
+            await qualificationService.dao.db.query("CREATE TABLE public.qualification(id_qualification SERIAL PRIMARY KEY, id_user INT REFERENCES public.user(id_user) ON DELETE CASCADE, id_poste_travail INT REFERENCES public.poste_travail(id_poste_travail) ON DELETE CASCADE)")
+            // INSERTs
+            qualificationService.insert(1,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+        } catch (e) {
+            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
+                resolve()
+                console.log("table qualification déjà créé")
+            } else {
+                reject(e)
+                console.log(e)
+            }
+        }
+
+        //Creation table machine + seed machine
+
+        try {
+            await machineService.dao.db.query("CREATE TABLE public.machine(id_machine SERIAL PRIMARY KEY, label TEXT)")
+            // INSERTs
+            machineService.insert("machine1")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            machineService.insert("machine2")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            machineService.insert("machine3")
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+        } catch (e) {
+            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
+                resolve()
+                console.log("table machine déjà créé")
+            } else {
+                reject(e)
+                console.log(e)
+            }
+        }
+
+        // Creation table poste_machine + seed poste_machine
+
+        try {
+            await postemachineService.dao.db.query("CREATE TABLE public.poste_machine(id_poste_machine SERIAL PRIMARY KEY, id_poste_travail INT REFERENCES public.poste_travail(id_poste_travail) ON DELETE CASCADE, id_machine INT REFERENCES public.machine(id_machine) ON DELETE CASCADE)")
+            // INSERTs
+            postemachineService.insert(1,1)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            postemachineService.insert(1,2)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+            postemachineService.insert(2,3)
+                .then(res => console.log(res))
+                .catch(e => console.log(e))
+        } catch (e) {
+            if (e.code === "42P07") { // TABLE ALREADY EXISTS https://www.postgresql.org/docs/8.2/errcodes-appendix.html
+                resolve()
+                console.log("table postemachine déjà créé")
+            } else {
+                reject(e)
+                console.log(e)
+            }
+        }
     })
+
+    
+
+        
     
 }

@@ -1,4 +1,4 @@
-const BaseDAO = require('./basedao')
+const BaseDAO = require('../basedao')
 
 module.exports = class UserDAO extends BaseDAO {
     constructor(db) {

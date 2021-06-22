@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
-const UserDAO = require("../datamodel/userdao")
-const User = require('../class/user')
+const UserDAO = require("../../datamodel/user-droits/userdao")
+const User = require('../../class/user-droits/user')
 
 module.exports = class UserService {
     constructor(db) {
