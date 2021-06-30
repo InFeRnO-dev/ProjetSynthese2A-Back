@@ -10,6 +10,10 @@ module.exports = class Poste_MachineService {
         return this.dao.getAll()
     }
 
+    async getPosteMachineById(id_poste_travail, id_machine){
+        return this.dao.getPosteMachineById(id_poste_travail, id_machine)
+    }
+
     async getAllMachinesWithoutPosteTravail(){
         return this.dao.getAllMachinesWithoutPosteTravail()
     }

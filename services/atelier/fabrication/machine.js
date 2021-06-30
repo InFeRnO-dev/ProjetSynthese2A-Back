@@ -1,7 +1,7 @@
 const MachineDAO = require("../../../datamodel/atelier/fabrication/machine")
 const Machine = require('../../../class/atelier/fabrication/machine')
 
-module.exports = class Poste_TravailService {
+module.exports = class MachineService {
     constructor(db) {
         this.dao = new MachineDAO(db)
     }

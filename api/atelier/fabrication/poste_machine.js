@@ -9,6 +9,10 @@ module.exports = (app, servicePoste_Machine, jwt) => {
         return res.json(await servicePoste_Machine.dao.getAllMachinesByIdPosteTravail(id))
     })
 
+    app.get('/poste_machine/:id_poste_travail/:id_machine', async (req, res) => {
+        return res.json(await servicePoste_Machine.getPosteMachineById(req.params.id_poste_travail, req.params.id_machine))
+    })
+
     app.get('/poste_machine/machine', async (req, res) => {
         return res.json(await servicePoste_Machine.dao.getAllMachinesWithoutPosteTravail())
     })

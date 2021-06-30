@@ -20,6 +20,14 @@ module.exports = class Poste_MachineDAO extends BaseDAO {
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
+    getPosteMachineById(id_poste_travail, id_machine) {
+        return new Promise((resolve, reject) =>
+            this.db.query(`SELECT * FROM poste_machine
+                           WHERE id_poste_travail = $1 AND id_machine = $2`,
+            [id_poste_travail, id_machine])
+                .then(res => resolve(res.rows[0]))
+                .catch(e => reject(e)))
+    }
 
     getAllMachinesWithoutPosteTravail() {
         return new Promise((resolve, reject) =>
