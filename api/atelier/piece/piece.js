@@ -6,6 +6,10 @@ module.exports = (app, servicePiece, stock_pieceService, jwt) => {
         return res.json(await servicePiece.dao.getAll())
     })
 
+    app.get('/piece/gamme', async (req, res) => {
+        return res.json(await servicePiece.getAllPieceWithoutGamme())
+    })
+
     app.get('/piece/type/:id_type_piece', async (req, res) => {
         return res.json(await servicePiece.getAllPieceByType(req.params.id_type_piece))
     })

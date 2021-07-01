@@ -17,5 +17,9 @@ module.exports = class GammeService {
     async insert(label, id_user, id_piece){
         return this.dao.insert(new Gamme(label, id_user, id_piece))
     }
+
+    async update(id_gamme, label, id_user){
+        return this.dao.update(id_gamme, label, id_user)
+    }
     
 }

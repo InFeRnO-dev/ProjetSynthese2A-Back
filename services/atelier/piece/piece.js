@@ -10,6 +10,10 @@ module.exports = class PieceService {
         return this.dao.getAll()
     }
 
+    async getAllPieceWithoutGamme(){
+        return this.dao.getAllPieceWithoutGamme()
+    }
+
     async getAllPieceByType(id_type_piece){
         return this.dao.getAllPieceByType(id_type_piece)
     }

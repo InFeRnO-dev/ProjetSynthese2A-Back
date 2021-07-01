@@ -9,6 +9,10 @@ module.exports = class Type_PieceService {
     async getAll(){
         return this.dao.getAll()
     }
+    
+    async getAllPieceWithoutLivrable(){
+        return this.dao.getAllPieceWithoutLivrable()
+    }
 
     async insert(label){
         return this.dao.insert(new Type_Piece(label))

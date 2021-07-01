@@ -293,10 +293,10 @@ module.exports = (userService,
         try {
             await pieceService.dao.db.query("CREATE TABLE public.piece(id_piece SERIAL PRIMARY KEY, reference TEXT, label TEXT, prix_vente FLOAT, prix_achat FLOAT, id_stock_piece INT REFERENCES public.stock_piece(id_stock_piece), id_type_piece INT REFERENCES public.type_piece(id_type_piece), id_fournisseur_piece INT REFERENCES public.fournisseur_piece(id_fournisseur_piece))")
             // INSERTs
-            pieceService.insert("PIECE0001", "raquette", 500.0, 0.0, 1, 1, 1)
+            pieceService.insert("PIECE0001", "raquette", 500.0, 0.0, 1, 1, null)
                 .then(res => console.log(res))
                 .catch(e => console.log(e))
-            pieceService.insert("PIECE0002", "manche raquette", 0.0, 0.0, 2, 2, 2)
+            pieceService.insert("PIECE0002", "manche raquette", 0.0, 0.0, 2, 2, null)
                 .then(res => console.log(res))
                 .catch(e => console.log(e))
             pieceService.insert("PIECE0003", "bois", 0.0, 0.0, 3, 3, 3)

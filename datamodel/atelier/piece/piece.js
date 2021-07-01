@@ -27,6 +27,29 @@ module.exports = class PieceDAO extends BaseDAO {
                 .catch(e => reject(e)))
     }
 
+    getAllPieceWithoutGamme(){
+        return new Promise((resolve, reject) =>
+            this.db.query(`SELECT public.piece.id_piece,
+                                  public.piece.reference,
+                                  public.piece.label,
+                                  public.piece.prix_vente,
+                                  public.piece.prix_achat,
+                                  public.stock_piece.id_stock_piece,
+                                 (public.stock_piece.quantite) as stock,
+                                 (public.type_piece.label) as type,
+                                 (public.fournisseur_piece.label) as fournisseur,
+                                 (public.gamme.id_gamme) as gamme
+                           FROM public.piece
+                           LEFT JOIN public.stock_piece on public.piece.id_stock_piece = public.stock_piece.id_stock_piece
+                           LEFT JOIN public.type_piece on public.piece.id_type_piece = public.type_piece.id_type_piece
+                           LEFT JOIN public.fournisseur_piece on public.piece.id_fournisseur_piece = public.fournisseur_piece.id_fournisseur_piece
+                           LEFT JOIN public.gamme on public.gamme.id_piece = public.piece.id_piece
+                           WHERE public.gamme.id_gamme is null AND (public.piece.id_type_piece = 1 OR public.piece.id_type_piece = 2)
+                           ORDER BY public.piece.id_piece ASC`)
+                .then(res => resolve(res.rows))
+                .catch(e => reject(e)))
+    }
+
     getAllPieceByType(id_type_piece){
         return new Promise((resolve, reject) =>
             this.db.query(`SELECT public.piece.id_piece,

@@ -18,5 +18,15 @@ module.exports = (app, serviceGamme, jwt) => {
             res.status(500).end()
         }
     })
+
+    app.put('/gamme/edit', async (req, res) => {
+        try{
+            serviceGamme.update(req.body.id_gamme, req.body.label, req.body.id_user)
+            res.status(200).end()
+        }catch(e){
+            console.log(e)
+            res.status(500).end()
+        }
+    })
     
 }
